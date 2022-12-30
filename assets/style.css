@@ -47,3 +47,33 @@ main {
   margin: auto;
   align-items: center;
 }
+
+.questions {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: auto;
+  align-items: center;
+  text-align: left;
+}
+
+.submit {
+  border: none;
+  background-color: #008C8F;
+  border-radius: 25px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 6px 0px rgba(0, 0, 0, 0.2) 0px 1px 1px
+    0px;
+  color: hsl(0, 0%, 100%);
+  display: inline-block;
+  font-size: 15px;
+  line-height: 20px;
+  margin: 16px 16px 16px 0px;
+  padding: 10px 20px;
+  text-align: center;
+  cursor: pointer;
+  width: 150px;
+}
+
+.questions label {
+  line-height: 45px;
+}
