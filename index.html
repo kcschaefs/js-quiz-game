@@ -27,18 +27,21 @@
         from the timer!</p>
       <button id="begin" class="btn">Start Quiz</button>
     </div>
+
     <section class="questions">
-      <div id="q1">
-          <h2>Inside which HTML element do we put the JavaScript?</h2>
-          <input type="radio" id="a1" name="answer" value="javascript">
-          <label for="javascript">javascript</label> <br>
-          <input type="radio" id="a2" name="answer" value="js">
-          <label for="js">js</label> <br>
-          <input type="radio" id="a3" name="answer" value="script">
-          <label for="script">script</label> <br>
-          <input type="radio" id="a4" name="answer" value="scripting">
-          <label for="scripting">scripting</label> <br>
-          <input class="submit" type="submit" value="Submit">
+      <div>
+        <h2 id="q"></h2>
+        <input type="radio" id="answer1" name="answer" value="a1">
+        <label id="a1" for="answer1">answer 1</label> <br>
+        <input type="radio" id="answer2" name="answer" value="a2">
+        <label id="a2" for="answer2"></label> <br>
+        <input type="radio" id="answer3" name="answer" value="a3">
+        <label id="a3" for="answer3"></label> <br>
+        <input type="radio" id="answer4" name="answer" value="a4">
+        <label id="a4" for="answer4"></label> <br>
+        <input id="submit" class="submit" type="submit" value="Submit">
+      </div>
+      <p id="response"></p>
       </div>
     </section>
 
