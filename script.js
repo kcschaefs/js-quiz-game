@@ -1,14 +1,18 @@
 
-var generateBtn = document.querySelector("#begin");
-var generateBtn = document.querySelector("#submit");
+var startBtn = document.querySelector("#begin");
+var submitBtn = document.querySelector("#submit");
 
 
 var correct = 0;
 var wrong = 0;
 
+
 // timer --------------------------------------------------------------
 
 var time_in_minutes = 10;
+// '0' to assign the first (and only `HTML` tag)
+
+
 
 function twoDigits(x) {
   return (x <= 9 ? "0" + x : x);
@@ -37,19 +41,52 @@ function startQuizClick(event) {
   update_clock(endTime);
 }
 
-generateBtn.addEventListener("click", startQuizClick);
+function progressQuizClick(event) {
+  var d = document.getElementById("intro");
+  d.className += "hidden";
+  var x = document.getElementById("quiz");
+  x.classList.remove("hidden");
+}
 
+startBtn.addEventListener("click", startQuizClick);
+startBtn.addEventListener("click", progressQuizClick);
 
 // questions --------------------------------------------------------------
 
+var questionList = [
+  {
+    question: "Inside which HTML element do we put the JavaScript?",
+    answers: ["&lt;javascript&gt;", "&lt;js&gt;", "&lt;script&gt;", "&lt;scripting&gt;"],
+    correctAnswer: 2,
+    order: 0
+  },
+  {
+    question: "Where is the correct place to insert a JavaScript?",
+    answers: ["The &lt;head&gt; section", "The &lt;body&gt; section", "Both the &lt;head&gt; and the &lt;body&gt; sections"],
+    correctAnswer: 1,
+    order: 1
+  },
+  {
+    question: "What is the correct syntax for referring to an external script called 'xxx.js'?",
+    answers: ["&lt;script src='xxx.js'&gt;", "&lt;script name='xxx.js'&gt;", "&lt;script href='xxx.js'&gt;"],
+    correctAnswer: 0,
+    order: 2
+  },
+  {
+    question: "The external JavaScript file must contain the <script> tag.",
+    answers: ["True", "False"],
+    correctAnswer: 0,
+    order: 3
+  },
+  {
+    question: "How do you write 'Hello World' in an alert box?",
+    answers: ["msg('Hello World');", "msgBox('Hellow World');", "alertBox('Hello World');", "alert('Hello World');"],
+    correctAnswer: 3,
+    order: 3
+  },
+]
 
-var questionsList = {
-  q1: "Inside which HTML element do we put the JavaScript?",
-  a1: "&lt;javascript&gt;",
-  a2: "&lt;js&gt;",
-  a3: "&lt;script&gt;",
-  a4: "&lt;scripting&gt;",
-}
+var currentQuestion = questionList[1];
 
 function serveQuestion() {
   var question = document.getElementById('q');
@@ -57,11 +94,11 @@ function serveQuestion() {
   var answer2 = document.getElementById('a2');
   var answer3 = document.getElementById('a3');
   var answer4 = document.getElementById('a4');
-  question.innerHTML = questionsList.q1;
-  answer1.innerHTML = questionsList.a1;
-  answer2.innerHTML = questionsList.a2;
-  answer3.innerHTML = questionsList.a3;
-  answer4.innerHTML = questionsList.a4;
+  question.innerHTML = currentQuestion.question;
+  answer1.innerHTML = currentQuestion.answers[0];
+  answer2.innerHTML = currentQuestion.answers[1];
+  answer3.innerHTML = currentQuestion.answers[2];
+  answer4.innerHTML = currentQuestion.answers[3];
 }
 
 serveQuestion();
@@ -69,23 +106,21 @@ serveQuestion();
 function submitQuestion() {
   var response = document.getElementById('response');
   var answer = document.querySelector('input[name="answer"]:checked').value;
-  if (answer === "a3") {
+  if (answer == currentQuestion.correctAnswer) {
     response.innerHTML = "Correct!";
+    response.removeAttribute("hidden")
     correct += 1;
   }
   else {
     response.innerHTML = "Wrong";
+    response.removeAttribute("hidden")
     wrong += 1;
   }
   //console.log (document.querySelector('input[name="answer"]:checked').value);
 }
 
 
-generateBtn.addEventListener("click", submitQuestion);
+submitBtn.addEventListener("click", submitQuestion);
 
-// answers --------------------------------------------------------------
+// progressNextQuestion --------------------------------------------------------------
 
-
-function serveAnswer() {
-
-}

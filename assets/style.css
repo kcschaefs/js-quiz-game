@@ -48,9 +48,7 @@ main {
   align-items: center;
 }
 
-.questions {
-  display: flex;
-  flex-direction: column;
+.quizContainer {
   width: 50%;
   margin: auto;
   align-items: center;
@@ -74,6 +72,22 @@ main {
   width: 150px;
 }
 
-.questions label {
+.options {
   line-height: 45px;
+  text-align: left;
+  width: 50%;
+  margin: auto
+}
+
+#response {
+  font-size: 30px;
+  line-height: 45px;
+  border-top: 2px solid #008C8F ;
+  width: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
 }
