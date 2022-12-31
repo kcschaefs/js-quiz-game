@@ -21,12 +21,36 @@
   </header>
 
   <main>
-    <div class="wrapper">
-      <h1>JavaScript Coding Quiz Challenge</h1>
-      <p>Answer as many code related questions as you can in the time alloted. Each wrong answer will remove 10 seconds
-        from the timer!</p>
-      <button id="begin" class="btn">Start Quiz</button>
-    </div>
+    <section id="intro">
+      <div class="wrapper">
+        <h1>JavaScript Coding Quiz Challenge</h1>
+        <p>Answer as many code related questions as you can in the time alloted. Each wrong answer will remove 10 seconds from the timer!</p>
+        <button id="begin" class="btn">Start Quiz</button>
+      </div>
+    </section>
+
+    <section class="hidden" id="quiz" class="quizContainer">
+      <div>
+        <h2 id="q"></h2>
+      </div>
+      <div class="options">
+        <input type="radio" id="answer1" name="answer" value="0">
+        <label id="a1" for="answer1">answer 1</label> <br>
+        <input type="radio" id="answer2" name="answer" value="1">
+        <label id="a2" for="answer2"></label> <br>
+        <input type="radio" id="answer3" name="answer" value="2">
+        <label id="a3" for="answer3"></label> <br>
+        <input type="radio" id="answer4" name="answer" value="3">
+        <label id="a4" for="answer4"></label> <br>
+        <input id="submit" class="submit" type="submit" value="Submit">
+      </div>
+      <div hidden id="response"></div>
+      </div>
+    </section>
+
+
+
+
   </main>
 
 
