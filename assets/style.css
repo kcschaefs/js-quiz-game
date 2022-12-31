@@ -49,10 +49,13 @@ main {
 }
 
 .quizContainer {
+  display: flex;
+  flex-direction: column;
   width: 50%;
   margin: auto;
   align-items: center;
   text-align: left;
+  justify-content: left;
 }
 
 .submit {
@@ -72,22 +75,33 @@ main {
   width: 150px;
 }
 
-.options {
+.quizContainer .options {
   line-height: 45px;
   text-align: left;
-  width: 50%;
+  width: 90%;
   margin: auto
 }
 
-#response {
+.quizContainer #response {
   font-size: 30px;
   line-height: 45px;
   border-top: 2px solid #008C8F ;
-  width: 50%;
+  width: 100%;
   margin: auto;
   text-align: center;
 }
 
-.hidden {
-  display: none;
+.nameEntryContainer {
+  display: flex;
+  flex-direction: column;
+  /* border-color: red;
+  border-style: solid;
+  border-width: 3px; */
+  width: 50%;
+  margin: auto;
+}
+
+#yourScore {
+  font-size: 25px;
+  font-weight: bold;
 }

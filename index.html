@@ -24,37 +24,71 @@
     <section id="intro">
       <div class="wrapper">
         <h1>JavaScript Coding Quiz Challenge</h1>
-        <p>Answer as many code related questions as you can in the time alloted. Each wrong answer will remove 10 seconds from the timer!</p>
+        <p>Answer as many code related questions as you can in the time alloted. Each wrong answer will remove 10
+          seconds from the timer!</p>
         <button id="begin" class="btn">Start Quiz</button>
       </div>
     </section>
 
-    <section class="hidden" id="quiz" class="quizContainer">
-      <div>
-        <h2 id="q"></h2>
+    <section class="quizContainer">
+      <div hidden id="quiz">
+        <div>
+          <h2 id="q"></h2>
+        </div>
+        <div class="options">
+          <input type="radio" id="answer1" name="answer" value="0">
+          <label id="a1" for="answer1">answer 1</label> <br>
+          <input type="radio" id="answer2" name="answer" value="1">
+          <label id="a2" for="answer2"></label> <br>
+          <input type="radio" id="answer3" name="answer" value="2">
+          <label id="a3" for="answer3"></label> <br>
+          <input type="radio" id="answer4" name="answer" value="3">
+          <label id="a4" for="answer4"></label> <br>
+          <input id="submit" class="submit" type="submit" value="Submit">
+        </div>
+        <div hidden id="response"></div>
       </div>
-      <div class="options">
-        <input type="radio" id="answer1" name="answer" value="0">
-        <label id="a1" for="answer1">answer 1</label> <br>
-        <input type="radio" id="answer2" name="answer" value="1">
-        <label id="a2" for="answer2"></label> <br>
-        <input type="radio" id="answer3" name="answer" value="2">
-        <label id="a3" for="answer3"></label> <br>
-        <input type="radio" id="answer4" name="answer" value="3">
-        <label id="a4" for="answer4"></label> <br>
-        <input id="submit" class="submit" type="submit" value="Submit">
       </div>
-      <div hidden id="response"></div>
+    </section>
+
+    <section class="nameEntryContainer">
+      <div hidden id="nameEntry">
+        <div>
+          <p>Great Job!</p>
+          <div id="yourScore">placeholder</div> 
+          <!--need to add an innerHTML to insert final score here -->
+          <p>Enter your initials below to log your score</p>
+        </div>
+        <input type="text" id="name" name="initials">
+        <br>
+        <input id="finalScore" class="submit" type="submit" value="Next">
       </div>
     </section>
 
 
+    <section class="quizContainer">
+      <div hidden id="leaderboard">
+        <div>
+          <h2>Leaderboard</h2>
+          <ol class="options">
+            <li>placeholder 1</li>
+            <li>placeholder 2</li>
+            <li>placeholder 3</li>
+            <li>placeholder 4</li>
+            <li>placeholder 5</li>
+          </ol>
+        </div>
+        <button id="retake" class="btn">Retake Quiz</button>
+      </div>
+    </section>
+
+<script src="./script.js"></script>
 
 
   </main>
 
-
-  <script src="./script.js"></script>
-</body>
-
 </html>
+
+<!-- <label class="radiocontainer checkedlabel" id="label2"> document.getElementById("demo").innerHTML = "Hello
+  World!";<input type="radio" name="quiz" id="2" onclick="clickRadio(this)" value="2"><span
+    class="checkmark"></span></label> -->
