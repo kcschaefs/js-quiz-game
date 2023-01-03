@@ -5,8 +5,10 @@ const scoreBtn = document.querySelector('#finalScore')
 const retakeBtn = document.querySelector('#retake')
 const radioButtons = document.querySelectorAll('input [name="answer"]');
 
+
 var nameEntry = document.getElementById("nameEntry");
 var leaderboard = document.getElementById("leaderboard");
+var clock = document.getElementById('timer');
 
 var endTime;
 var timeinterval;
@@ -34,30 +36,28 @@ function time_remaining() {
 
 function update_clock() {
   var timeLeft = time_remaining();
-  var clock = document.getElementById('timer');
   clock.innerHTML = 'Timer ' + twoDigits(timeLeft.minutes) + ':' + twoDigits(timeLeft.seconds);
   if (!timeinterval) { //this creates the new interval as necessary
     timeinterval = setInterval(update_clock, 1000)
   }
   if (timeLeft.total <= 0) {
-    clearInterval(timeinterval); 
-    console.log(timeinterval);
+    clearInterval(timeinterval);
     clock.innerHTML = 'Timer 00:00';//timer keeps going, can't get it to stop, easy solution for time is just to hide the clock
     serveNameEntry();
-    timeinterval=null;
+    timeinterval = null;
   }
 } // updates the countdown every second
 
 function startQuizClick(event) {
-  endTime = Date.now() + time_in_minutes * 60 * 1000;
-  update_clock();
-  progressQuizClick ();
-  serveQuestion();
+    endTime = Date.now() + time_in_minutes * 60 * 1000;
+    update_clock();
+    progressQuizClick();
+    serveQuestion();
 } // starts the serving of questions and timer
 
 function progressQuizClick(event) {
   var d = document.getElementById("intro");
-  d.setAttribute ("hidden","");
+  d.setAttribute("hidden", "");
   var quiz = document.getElementById("quiz");
   quiz.removeAttribute("hidden")
 } // serves the next question after hitting submit button
@@ -194,9 +194,9 @@ function submitQuestion() {
     response.innerHTML = "Wrong";
     response.removeAttribute("hidden")
     wrong += 1;
-    clearInterval(timeinterval); 
+    clearInterval(timeinterval);
     timeinterval = null;
-    endTime = endTime - (30*1000);
+    endTime = endTime - (30 * 1000);
     update_clock();
   }
 } // submits and checks the answer
@@ -208,8 +208,15 @@ submitBtn.addEventListener("click", submitQuestion);
 
 function progressNextQuestion(event) {
   count++;
-  serveQuestion();
-  response.setAttribute("hidden", "")
+  response.setAttribute("hidden", "");
+  if (count >= questionList.length) {
+    serveNameEntry();
+    clearInterval(timeinterval);
+    timeinterval = null;
+    clock.innerHTML = 'Timer 00:00';
+  } else {
+    serveQuestion();
+  }
 } //  runs through the questions array, serving the next question in the array
 
 submitBtn.addEventListener("click", progressNextQuestion);
@@ -218,7 +225,7 @@ submitBtn.addEventListener("click", progressNextQuestion);
 // leaderboard --------------------------------------------------------------
 
 function serveNameEntry() {
-  quiz.setAttribute("hidden","");
+  quiz.setAttribute("hidden", "");
   nameEntry.removeAttribute("hidden");
   finalScore();
 }
@@ -229,17 +236,87 @@ function finalScore() {
   s.innerHTML = "Final Score: " + correct + " / " + total;
 } // shows the final score - change to be tied to the upper left scores tag?
 
+
+
+var leaderboardNames = [];
+
+function addName(event) {
+  var nameVal = document.getElementById("name").value;
+  leaderboardNames = leaderboardNames.concat(nameVal);
+  //console.log(nameVal);
+  serveLeaderboard();
+}
+
+function updateLB() {
+  var lB = document.getElementById("leaderboard");
+  lB.innerHTML = leaderboardNames[0];
+}
+
+
+
+
+
+// function getInputValue(){
+//   // Selecting the input element and get its value 
+//   var inputVal = document.getElementById("myInput").value;
+
+//   // Displaying the value
+//   alert(inputVal);
+// }
+
+// function askUseSpecialChar() {
+//   var response = confirm("Is it ok to use special characters?");
+//   if (response == true) {
+//     useSpecialChar = true;
+//   } else useSpecialChar = false;
+// }
+
+
+// if (useSpecialChar == true) {
+//   charsToUse = charsToUse.concat(addSpecialChar); //adds spec characters to array
+// }
+
+function addElementLB() {
+  
+
+
+  var addLB = document.getElementById("leaderboard");
+  
+  var divTag = document.createElement("div");
+  var olTag = document.createElement("ol");
+
+  for (var person of leaderboardNames) {
+  const lB1 = document.createElement("li");
+  olTag.appendChild(lB1);
+  lB1.textContent = person;
+  }
+
+  addLB.insertBefore(divTag, retakeBtn);
+
+  olTag.classList.add("options");
+
+  
+  //lB2.textContent = leaderboardNames[1];
+
+  
+  //olTag.appendChild(lB2);
+  divTag.appendChild(olTag);
+}
+
+
+
 function serveLeaderboard() {
   leaderboard.removeAttribute("hidden");
-  nameEntry.setAttribute("hidden","");
+  nameEntry.setAttribute("hidden", "");
+  addElementLB();
 }
 
 function retakeQuizClick(event) {
-  leaderboard.setAttribute("hidden","")
+  leaderboard.setAttribute("hidden", "")
   startQuizClick();
 } // allows user to retake the quiz, starts over from the beginning
 
-scoreBtn.addEventListener("click", serveLeaderboard);
+scoreBtn.addEventListener("click", addName);
 
 
-retakeBtn.addEventListener("click",retakeQuizClick);
+retakeBtn.addEventListener("click", retakeQuizClick);
