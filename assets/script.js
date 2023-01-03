@@ -1,56 +1,66 @@
 
-var startBtn = document.querySelector("#begin");
-var submitBtn = document.querySelector("#submit");
-var scoreBtn = document.querySelector('#finalScore')
-var retakeBtn = document.querySelector('#retake')
-var radioButtons = document.querySelectorAll('input [name="answer"]');
+const startBtn = document.querySelector("#begin");
+const submitBtn = document.querySelector("#submit");
+const scoreBtn = document.querySelector('#finalScore')
+const retakeBtn = document.querySelector('#retake')
+const radioButtons = document.querySelectorAll('input [name="answer"]');
 
-var correct = 0;
-var wrong = 0;
-var count = 0;
+var nameEntry = document.getElementById("nameEntry");
+var leaderboard = document.getElementById("leaderboard");
 
+var endTime;
+var timeinterval;
 
+let correct = 0;
+let wrong = 0;
+let count = 0;
 
 
 // timer --------------------------------------------------------------
 
-var time_in_minutes = 10;
+var time_in_minutes = 5; // sets the timer to the appropriate number of minutes
 
 function twoDigits(x) {
   return (x <= 9 ? "0" + x : x);
 }
 
-function time_remaining(endtime) {
+function time_remaining() {
   var now = Date.now();
-  var timeLeft = endtime - now;
+  var timeLeft = endTime - now;
   var seconds = Math.floor((timeLeft / 1000) % 60);
   var minutes = Math.floor((timeLeft / 1000 / 60) % 60);
   return { 'total': timeLeft, 'minutes': minutes, 'seconds': seconds };
-}
+}  //calculates the countdown
 
-function update_clock(endtime) {
-  var timeLeft = time_remaining(endtime);
+function update_clock() {
+  var timeLeft = time_remaining();
   var clock = document.getElementById('timer');
   clock.innerHTML = 'Timer ' + twoDigits(timeLeft.minutes) + ':' + twoDigits(timeLeft.seconds);
-  var timeinterval = setInterval(update_clock, 1000, endtime);
-  if (timeLeft.total <= 0) {
-    clearInterval(timeinterval);
+  if (!timeinterval) { //this creates the new interval as necessary
+    timeinterval = setInterval(update_clock, 1000)
   }
-}
+  if (timeLeft.total <= 0) {
+    clearInterval(timeinterval); 
+    console.log(timeinterval);
+    clock.innerHTML = 'Timer 00:00';//timer keeps going, can't get it to stop, easy solution for time is just to hide the clock
+    serveNameEntry();
+    timeinterval=null;
+  }
+} // updates the countdown every second
 
 function startQuizClick(event) {
-  var endTime = Date.now() + time_in_minutes * 60 * 1000;
-  update_clock(endTime);
+  endTime = Date.now() + time_in_minutes * 60 * 1000;
+  update_clock();
   progressQuizClick ();
   serveQuestion();
-}
+} // starts the serving of questions and timer
 
 function progressQuizClick(event) {
   var d = document.getElementById("intro");
   d.setAttribute ("hidden","");
   var quiz = document.getElementById("quiz");
   quiz.removeAttribute("hidden")
-}
+} // serves the next question after hitting submit button
 
 
 startBtn.addEventListener("click", startQuizClick);
@@ -135,9 +145,10 @@ function serveQuestion() {
   answer2.innerHTML = currentQuestion.answers[1];
   answer3.innerHTML = currentQuestion.answers[2];
   answer4.innerHTML = currentQuestion.answers[3];
-}
+} // serves the questions in the right format
 
-
+// this is stuff for dynamically serving radio buttons through JS 
+//view the create/append lesson module 4 - 01- 08: solved and filed under in class
 
 //let div = document.createElement("div")
 //let p = document.createElement("p")
@@ -183,8 +194,13 @@ function submitQuestion() {
     response.innerHTML = "Wrong";
     response.removeAttribute("hidden")
     wrong += 1;
+    clearInterval(timeinterval); 
+    timeinterval = null;
+    endTime = endTime - (30*1000);
+    update_clock();
   }
-}
+} // submits and checks the answer
+
 
 submitBtn.addEventListener("click", submitQuestion);
 
@@ -194,27 +210,36 @@ function progressNextQuestion(event) {
   count++;
   serveQuestion();
   response.setAttribute("hidden", "")
-}
+} //  runs through the questions array, serving the next question in the array
 
 submitBtn.addEventListener("click", progressNextQuestion);
 
 
 // leaderboard --------------------------------------------------------------
 
+function serveNameEntry() {
+  quiz.setAttribute("hidden","");
+  nameEntry.removeAttribute("hidden");
+  finalScore();
+}
+
 function finalScore() {
   var s = document.getElementById("yourScore");
-  var total = correct+wrong;
+  var total = questionList.length;
   s.innerHTML = "Final Score: " + correct + " / " + total;
-}
+} // shows the final score - change to be tied to the upper left scores tag?
 
+function serveLeaderboard() {
+  leaderboard.removeAttribute("hidden");
+  nameEntry.setAttribute("hidden","");
+}
 
 function retakeQuizClick(event) {
-  var leaderboard = document.getElementById("leaderboard");
   leaderboard.setAttribute("hidden","")
   startQuizClick();
-}
+} // allows user to retake the quiz, starts over from the beginning
 
-scoreBtn.addEventListener("click", finalScore);
+scoreBtn.addEventListener("click", serveLeaderboard);
 
 
 retakeBtn.addEventListener("click",retakeQuizClick);

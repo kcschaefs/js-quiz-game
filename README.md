@@ -20,7 +20,8 @@ SO THAT I can gauge my progress compared to my peers
 - how to use CSS grid vs flexbox to more easily create the desired layout
 
 ## Future Improvements
-- 
+- cite the W3 schools quiz questions
+- set the score to update after each question and display somewhere on the screen
 
 
 
