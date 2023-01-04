@@ -130,10 +130,86 @@ var questionList = [
   },
 ]
 
+// var answerKey = {
+//   input: "type='radio'", 
+//   id: 'answer'i, 
+//   name: 'answer',
+//   value: x,
+// }
+
+// let i;
+// let x;
+
+// funciton addRadio() {
+//   for (i=1;i<=currentQuestion.answers; i++);
+//   for (x=0;x<=currentQuestion.answers; x++);
+
+// }
+
+
+
+function addElementQ() {
+  
+  var addQ = document.getElementById("quiz");
+  var divTag = document.createElement("div");
+  var h2Tag = document.createElement("h2");
+  var ulTag = document.createElement("ul");
+  let a1 = document.createElement("li");
+
+  // for (var answers of currentQuestion) {
+  //   // for (i=1;i<=currentQuestion.answers; i++);
+  //   // for (x=0;x<=currentQuestion.answers; x++);
+  //   //currentQuestion = questionList[count];
+  //   let a1 = document.createElement("li");
+  //   a1.setAttribute("input","type='radio'id='answer1' name='answer' value='0'"); //template literals? (back tick)
+  //   // ulTag.appendChild(a1);
+
+  // }
+
+//use for each to iterate over the array?
+  
+  addQ.insertBefore(divTag, submitBtn);
+  ulTag.classList.add("options");
+  h2Tag.setAttribute("id","q");
+  a1.setAttribute("id","a1");
+  //a1.setAttribute("input",type='radio' id='a1' name='answer' value='0');
+  
+  //create a function for adding radio button with the info below
+  //  var radiobox = document.createElement('input');
+  // radiobox.type = 'radio';
+  // radiobox.id = 'contact';
+  // radiobox.value = 'email';
+
+  // var label = document.createElement('label')
+  // label.htmlFor = 'contact';
+
+  // var description = document.createTextNode('Email');
+  // label.appendChild(description);
+
+  // var newline = document.createElement('br');
+
+  // var container = document.getElementById('container');
+  // container.appendChild(radiobox);
+  // container.appendChild(label);
+  // container.appendChild(newline);
+
+  divTag.appendChild(h2Tag);
+  divTag.appendChild(ulTag);
+  ulTag.appendChild(a1);
+  // divTag.appendChild(ulTag);
+}
+
+
+function serveLeaderboard() {
+  leaderboard.removeAttribute("hidden");
+  nameEntry.setAttribute("hidden", "");
+  addElementLB();
+}
 
 var currentQuestion;
 
 function serveQuestion() {
+  addElementQ();
   currentQuestion = questionList[count];
   var question = document.getElementById('q');
   var answer1 = document.getElementById('a1');
@@ -252,36 +328,9 @@ function updateLB() {
   lB.innerHTML = leaderboardNames[0];
 }
 
-
-
-
-
-// function getInputValue(){
-//   // Selecting the input element and get its value 
-//   var inputVal = document.getElementById("myInput").value;
-
-//   // Displaying the value
-//   alert(inputVal);
-// }
-
-// function askUseSpecialChar() {
-//   var response = confirm("Is it ok to use special characters?");
-//   if (response == true) {
-//     useSpecialChar = true;
-//   } else useSpecialChar = false;
-// }
-
-
-// if (useSpecialChar == true) {
-//   charsToUse = charsToUse.concat(addSpecialChar); //adds spec characters to array
-// }
-
 function addElementLB() {
   
-
-
   var addLB = document.getElementById("leaderboard");
-  
   var divTag = document.createElement("div");
   var olTag = document.createElement("ol");
 
@@ -292,17 +341,9 @@ function addElementLB() {
   }
 
   addLB.insertBefore(divTag, retakeBtn);
-
   olTag.classList.add("options");
-
-  
-  //lB2.textContent = leaderboardNames[1];
-
-  
-  //olTag.appendChild(lB2);
   divTag.appendChild(olTag);
 }
-
 
 
 function serveLeaderboard() {
@@ -320,3 +361,14 @@ scoreBtn.addEventListener("click", addName);
 
 
 retakeBtn.addEventListener("click", retakeQuizClick);
+
+// gary provided this code, may be helfpul in iterating through the radio button stuffs
+// // This function allows you to update multiple DOM elements at the same time
+// function updateDOMArray(domElements, attribute, newValue) {
+//   for( var i = 0; i < domElements.length; i++ ){
+//     var currentTag = domElements[i];
+//     currentTag.setAttribute(attribute, newValue);
+//   }
+// }
+
+// updateDOMArray(h4Tags, "style", "color: blue; font-size: 30px; font-weight: bold; padding-left: 10px; margin: 0;");
