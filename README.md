@@ -1,8 +1,8 @@
 # JavaScript Quiz Game
 
-[Click here to view final version of webpage](https://kcschaefs.github.io/password-generator/)
+[Click here to view final version of webpage](https://kcschaefs.github.io/js-quiz-game/)
 
-![Screenshot of the final page](./final-screenshot.png)
+![Screenshot of the final page](./assets/css/images/finalProjectScreenshot.png)
 
 
 ## User Story
