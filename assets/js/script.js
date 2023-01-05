@@ -3,9 +3,10 @@ const startBtn = document.querySelector("#begin");
 const submitBtn = document.querySelector("#submit");
 const scoreBtn = document.querySelector('#finalScore')
 const retakeBtn = document.querySelector('#retake')
-const radioButtons = document.querySelectorAll('input [name="answer"]');
 
-
+const highScoreView = document.getElementById("score");
+var intro = document.getElementById("intro");
+var quiz = document.getElementById("quiz");
 var nameEntry = document.getElementById("nameEntry");
 var leaderboard = document.getElementById("leaderboard");
 var clock = document.getElementById('timer');
@@ -49,17 +50,19 @@ function update_clock() {
 } // updates the countdown every second
 
 function startQuizClick(event) {
-    endTime = Date.now() + time_in_minutes * 60 * 1000;
-    update_clock();
-    progressQuizClick();
-    serveQuestion();
+  endTime = Date.now() + time_in_minutes * 60 * 1000;
+  count = 0;
+  correct = 0;
+  wrong = 0;
+  update_clock();
+  progressQuizClick();
+  serveQuestion();
+  clock.removeAttribute("hidden");
 } // starts the serving of questions and timer
 
 function progressQuizClick(event) {
-  var d = document.getElementById("intro");
-  d.setAttribute("hidden", "");
-  var quiz = document.getElementById("quiz");
-  quiz.removeAttribute("hidden")
+  intro.setAttribute("hidden", "");
+  quiz.removeAttribute("hidden");
 } // serves the next question after hitting submit button
 
 
@@ -75,17 +78,17 @@ var questionList = [
   },
   {
     question: "Where is the correct place to insert a JavaScript?",
-    answers: ["The &lt;head&gt; section", "The &lt;body&gt; section", "Both the &lt;head&gt; and the &lt;body&gt; sections"],
+    answers: ["The &lt;head&gt; section", "The &lt;body&gt; section", "Both the &lt;head&gt; and the &lt;body&gt; sections", "None of the above"],
     correctAnswer: 1,
   },
   {
     question: "What is the correct syntax for referring to an external script called 'xxx.js'?",
-    answers: ["&lt;script src='xxx.js'&gt;", "&lt;script name='xxx.js'&gt;", "&lt;script href='xxx.js'&gt;"],
+    answers: ["&lt;script src='xxx.js'&gt;", "&lt;script name='xxx.js'&gt;", "&lt;script href='xxx.js'&gt;", "script = xxx.js"],
     correctAnswer: 0,
   },
   {
     question: "The external JavaScript file must contain the &lt;script&gt; tag.",
-    answers: ["True", "False"],
+    answers: ["True", "False", "Truthy", "Falsey"],
     correctAnswer: 0,
   },
   {
@@ -120,7 +123,7 @@ var questionList = [
   },
   {
     question: "How can you add a comment in a JavaScript?",
-    answers: ["//This is a comment", "&lt;!--This is a comment--&gt;", "'This is a comment"],
+    answers: ["//This is a comment", "&lt;!--This is a comment--&gt;", "'This is a comment", "/*This is a comment*/"],
     correctAnswer: 0,
   },
   {
@@ -129,76 +132,6 @@ var questionList = [
     correctAnswer: 0,
   },
 ]
-
-// var answerKey = {
-//   input: "type='radio'", 
-//   id: 'answer'i, 
-//   name: 'answer',
-//   value: x,
-// }
-
-// let i;
-// let x;
-
-// funciton addRadio() {
-//   for (i=1;i<=currentQuestion.answers; i++);
-//   for (x=0;x<=currentQuestion.answers; x++);
-
-// }
-
-
-
-function addElementQ() {
-  
-  var addQ = document.getElementById("quiz");
-  var divTag = document.createElement("div");
-  var h2Tag = document.createElement("h2");
-  var ulTag = document.createElement("ul");
-  let a1 = document.createElement("li");
-
-  // for (var answers of currentQuestion) {
-  //   // for (i=1;i<=currentQuestion.answers; i++);
-  //   // for (x=0;x<=currentQuestion.answers; x++);
-  //   //currentQuestion = questionList[count];
-  //   let a1 = document.createElement("li");
-  //   a1.setAttribute("input","type='radio'id='answer1' name='answer' value='0'"); //template literals? (back tick)
-  //   // ulTag.appendChild(a1);
-
-  // }
-
-//use for each to iterate over the array?
-  
-  addQ.insertBefore(divTag, submitBtn);
-  ulTag.classList.add("options");
-  h2Tag.setAttribute("id","q");
-  a1.setAttribute("id","a1");
-  //a1.setAttribute("input",type='radio' id='a1' name='answer' value='0');
-  
-  //create a function for adding radio button with the info below
-  //  var radiobox = document.createElement('input');
-  // radiobox.type = 'radio';
-  // radiobox.id = 'contact';
-  // radiobox.value = 'email';
-
-  // var label = document.createElement('label')
-  // label.htmlFor = 'contact';
-
-  // var description = document.createTextNode('Email');
-  // label.appendChild(description);
-
-  // var newline = document.createElement('br');
-
-  // var container = document.getElementById('container');
-  // container.appendChild(radiobox);
-  // container.appendChild(label);
-  // container.appendChild(newline);
-
-  divTag.appendChild(h2Tag);
-  divTag.appendChild(ulTag);
-  ulTag.appendChild(a1);
-  // divTag.appendChild(ulTag);
-}
-
 
 function serveLeaderboard() {
   leaderboard.removeAttribute("hidden");
@@ -209,7 +142,6 @@ function serveLeaderboard() {
 var currentQuestion;
 
 function serveQuestion() {
-  addElementQ();
   currentQuestion = questionList[count];
   var question = document.getElementById('q');
   var answer1 = document.getElementById('a1');
@@ -223,40 +155,6 @@ function serveQuestion() {
   answer4.innerHTML = currentQuestion.answers[3];
 } // serves the questions in the right format
 
-// this is stuff for dynamically serving radio buttons through JS 
-//view the create/append lesson module 4 - 01- 08: solved and filed under in class
-
-//let div = document.createElement("div")
-//let p = document.createElement("p")
-//div.append("Some text", p)
-
-// askQuestion()
-
-//     // display the iterative choices
-//             function showChoices() {
-//                 var displayChoices = allQuestions[currentQuestion].choices;
-//                 for (var i = 0; i < displayChoices.length; i++) {
-//                     var label = document.createElement('label');
-//                     var input = document.createElement('input');
-
-//                     var br = document.createElement('br');
-
-//                     input.setAttribute("id", "Radios");
-//                     input.setAttribute('type', 'radio');
-//                     input.setAttribute('name', 'answer');
-//                     input.setAttribute('value', i);
-
-//                     label.appendChild(input);
-//                     label.appendChild(document.createTextNode(displayChoices[i]));
-
-//                     container.append(label);
-
-//                     container.append(br);
-//                 }
-//             }
-
-//serveQuestion();
-
 function submitQuestion() {
 
   var response = document.getElementById('response');
@@ -265,6 +163,7 @@ function submitQuestion() {
     response.innerHTML = "Correct!";
     response.removeAttribute("hidden")
     correct += 1;
+    console.log(currentQuestion.correctAnswer);
   }
   else {
     response.innerHTML = "Wrong";
@@ -310,37 +209,52 @@ function finalScore() {
   var s = document.getElementById("yourScore");
   var total = questionList.length;
   s.innerHTML = "Final Score: " + correct + " / " + total;
+  console.log(correct);
 } // shows the final score - change to be tied to the upper left scores tag?
 
 
 
-var leaderboardNames = [];
+var leaderboardNames = JSON.parse(localStorage.getItem("leaderboard"));
 
 function addName(event) {
   var nameVal = document.getElementById("name").value;
-  leaderboardNames = leaderboardNames.concat(nameVal);
-  //console.log(nameVal);
+  if (!leaderboardNames) {
+    leaderboardNames = []
+  };
+  leaderboardNames.push({ nameVal, correct });
+  leaderboardNames = leaderboardNames.sort((a,b)=>b.correct-a.correct);
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboardNames));
   serveLeaderboard();
-}
+} //adds name to the leaderboard array, sorts it by correct score
 
 function updateLB() {
   var lB = document.getElementById("leaderboard");
-  lB.innerHTML = leaderboardNames[0];
+  lB.innerHTML = `${leaderboardNames[0].nameVal}: ${correct}`;
+} // serves leaderboard from addName
+
+function removeDivTag() {
+  var grabDiv = document.getElementById("lbValue");
+  if (grabDiv) {
+    var addLB = document.getElementById("leaderboard");
+    addLB.removeChild(grabDiv);
+  }
 }
 
 function addElementLB() {
-  
+
   var addLB = document.getElementById("leaderboard");
   var divTag = document.createElement("div");
   var olTag = document.createElement("ol");
+  removeDivTag();
 
   for (var person of leaderboardNames) {
-  const lB1 = document.createElement("li");
-  olTag.appendChild(lB1);
-  lB1.textContent = person;
+    const lB1 = document.createElement("li");
+    olTag.appendChild(lB1);
+    lB1.textContent = `${person.nameVal}: ${person.correct}`;
   }
 
   addLB.insertBefore(divTag, retakeBtn);
+  divTag.setAttribute("id", "lbValue");
   olTag.classList.add("options");
   divTag.appendChild(olTag);
 }
@@ -349,6 +263,10 @@ function addElementLB() {
 function serveLeaderboard() {
   leaderboard.removeAttribute("hidden");
   nameEntry.setAttribute("hidden", "");
+  intro.setAttribute("hidden", "");
+  quiz.setAttribute("hidden", "");
+  clock.setAttribute("hidden", "");
+  clearInterval(timeinterval);
   addElementLB();
 }
 
@@ -362,13 +280,5 @@ scoreBtn.addEventListener("click", addName);
 
 retakeBtn.addEventListener("click", retakeQuizClick);
 
-// gary provided this code, may be helfpul in iterating through the radio button stuffs
-// // This function allows you to update multiple DOM elements at the same time
-// function updateDOMArray(domElements, attribute, newValue) {
-//   for( var i = 0; i < domElements.length; i++ ){
-//     var currentTag = domElements[i];
-//     currentTag.setAttribute(attribute, newValue);
-//   }
-// }
 
-// updateDOMArray(h4Tags, "style", "color: blue; font-size: 30px; font-weight: bold; padding-left: 10px; margin: 0;");
+highScoreView.addEventListener("click", serveLeaderboard);
