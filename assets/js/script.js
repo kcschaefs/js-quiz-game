@@ -1,4 +1,3 @@
-
 const startBtn = document.querySelector("#begin");
 const submitBtn = document.querySelector("#submit");
 const scoreBtn = document.querySelector('#finalScore')
@@ -13,7 +12,6 @@ var clock = document.getElementById('timer');
 
 var endTime;
 var timeinterval;
-
 let correct = 0;
 //let wrong = 0;
 let count = 0;
@@ -49,6 +47,9 @@ function update_clock() {
   }
 } // updates the countdown every second
 
+
+// start quiz --------------------------------------------------------------
+
 function startQuizClick(event) {
   endTime = Date.now() + time_in_minutes * 60 * 1000;
   count = 0;
@@ -67,6 +68,167 @@ function progressQuizClick(event) {
 
 
 startBtn.addEventListener("click", startQuizClick);
+
+function serveLeaderboard() {
+  leaderboard.removeAttribute("hidden");
+  nameEntry.setAttribute("hidden", "");
+  addElementLB();
+}
+
+
+// serve questions --------------------------------------------------------------
+
+var currentQuestion;
+
+function serveQuestion() {
+  currentQuestion = questionList[count];
+  var question = document.getElementById('q');
+  var answer1 = document.getElementById('a1');
+  var answer2 = document.getElementById('a2');
+  var answer3 = document.getElementById('a3');
+  var answer4 = document.getElementById('a4');
+  question.innerHTML = currentQuestion.question;
+  answer1.innerHTML = currentQuestion.answers[0];
+  answer2.innerHTML = currentQuestion.answers[1];
+  answer3.innerHTML = currentQuestion.answers[2];
+  answer4.innerHTML = currentQuestion.answers[3];
+   //this will "reset" the radio buttons - need to figure out how to add it in
+} // serves the questions in the right format
+
+
+// submit question --------------------------------------------------------------
+
+function submitQuestion() {
+
+  var response = document.getElementById('response');
+  var answer = document.querySelector('input[name="answer"]:checked').value;
+  submitBtn.disabled = true;
+//need to hide button upon submission, unhide for progressnextquestion
+  if (answer == currentQuestion.correctAnswer) {
+    response.innerHTML = "Correct!";
+    response.removeAttribute("hidden")
+    correct += 1;
+  }
+  else {
+    response.innerHTML = "Wrong";
+    response.removeAttribute("hidden")
+    //wrong += 1;
+    clearInterval(timeinterval);
+    timeinterval = null;
+    endTime = endTime - (30 * 1000);
+    update_clock();// penalty time, removes 30 seconds from timer for wrong answer
+  }
+  let timeoutID = setTimeout(progressNextQuestion, 1000); // sets response to show for 1 second before moving on to the next question
+  document.querySelector('input[name="answer"]:checked').checked = false;
+} // submits and checks the answer
+
+
+submitBtn.addEventListener("click", submitQuestion);
+
+
+// progress next question --------------------------------------------------------------
+
+function progressNextQuestion(event) {
+  count++;
+  response.setAttribute("hidden", "");
+  submitBtn.disabled = false;
+  if (count >= questionList.length) {
+    serveNameEntry();
+    clearInterval(timeinterval);
+    timeinterval = null;
+    clock.innerHTML = 'Timer 00:00';
+  } else {
+    serveQuestion();
+  }
+} //  runs through the questions array, serving the next question in the array
+
+
+// add name --------------------------------------------------------------
+
+function serveNameEntry() {
+  quiz.setAttribute("hidden", "");
+  nameEntry.removeAttribute("hidden");
+  finalScore();
+}
+
+function finalScore() {
+  var s = document.getElementById("yourScore");
+  var total = questionList.length;
+  s.innerHTML = "Final Score: " + correct + " / " + total;
+  console.log(correct);
+} // shows the final score - change to be tied to the upper left scores tag?
+
+function addName(event) {
+  var nameVal = document.getElementById("name").value;
+  if (!leaderboardNames) {
+    leaderboardNames = []
+  };
+  leaderboardNames.push({ nameVal, correct });
+  leaderboardNames = leaderboardNames.sort((a,b)=>b.correct-a.correct);
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboardNames));
+  serveLeaderboard();
+} //adds name to the leaderboard array, sorts it by correct score
+
+scoreBtn.addEventListener("click", addName);
+
+
+// leaderboard --------------------------------------------------------------
+
+var leaderboardNames = JSON.parse(localStorage.getItem("leaderboard"));
+
+function updateLB() {
+  var lB = document.getElementById("leaderboard");
+  lB.innerHTML = `${leaderboardNames[0].nameVal}: ${correct}`;
+} // serves leaderboard from addName
+
+function removeDivTag() {
+  var grabDiv = document.getElementById("lbValue");
+  if (grabDiv) {
+    var addLB = document.getElementById("leaderboard");
+    addLB.removeChild(grabDiv);
+  }
+}
+
+function addElementLB() {
+  var addLB = document.getElementById("leaderboard");
+  var divTag = document.createElement("div");
+  var olTag = document.createElement("ol");
+  removeDivTag();
+
+  for (var person of leaderboardNames) {
+    const lB1 = document.createElement("li");
+    olTag.appendChild(lB1);
+    lB1.textContent = `${person.nameVal}: ${person.correct}`;
+  }
+
+  addLB.insertBefore(divTag, retakeBtn);
+  divTag.setAttribute("id", "lbValue");
+  olTag.classList.add("options");
+  divTag.appendChild(olTag);
+}
+
+function serveLeaderboard() {
+  leaderboard.removeAttribute("hidden");
+  nameEntry.setAttribute("hidden", "");
+  intro.setAttribute("hidden", "");
+  quiz.setAttribute("hidden", "");
+  clock.setAttribute("hidden", "");
+  clearInterval(timeinterval);
+  addElementLB();
+}
+
+highScoreView.addEventListener("click", serveLeaderboard);
+
+
+// restart quiz --------------------------------------------------------------
+
+function retakeQuizClick(event) {
+  leaderboard.setAttribute("hidden", "")
+  startQuizClick();
+} // allows user to retake the quiz, starts over from the beginning
+
+retakeBtn.addEventListener("click", retakeQuizClick);
+
 
 // questions --------------------------------------------------------------
 
@@ -132,156 +294,3 @@ var questionList = [
     correctAnswer: 0,
   },
 ]
-
-function serveLeaderboard() {
-  leaderboard.removeAttribute("hidden");
-  nameEntry.setAttribute("hidden", "");
-  addElementLB();
-}
-
-var currentQuestion;
-
-function serveQuestion() {
-  currentQuestion = questionList[count];
-  var question = document.getElementById('q');
-  var answer1 = document.getElementById('a1');
-  var answer2 = document.getElementById('a2');
-  var answer3 = document.getElementById('a3');
-  var answer4 = document.getElementById('a4');
-  question.innerHTML = currentQuestion.question;
-  answer1.innerHTML = currentQuestion.answers[0];
-  answer2.innerHTML = currentQuestion.answers[1];
-  answer3.innerHTML = currentQuestion.answers[2];
-  answer4.innerHTML = currentQuestion.answers[3];
-   //this will "reset" the radio buttons - need to figure out how to add it in
-} // serves the questions in the right format
-
-function submitQuestion() {
-
-  var response = document.getElementById('response');
-  var answer = document.querySelector('input[name="answer"]:checked').value;
-  submitBtn.disabled = true;
-//need to hide button upon submission, unhide for progressnextquestion
-  if (answer == currentQuestion.correctAnswer) {
-    response.innerHTML = "Correct!";
-    response.removeAttribute("hidden")
-    correct += 1;
-  }
-  else {
-    response.innerHTML = "Wrong";
-    response.removeAttribute("hidden")
-    //wrong += 1;
-    clearInterval(timeinterval);
-    timeinterval = null;
-    endTime = endTime - (30 * 1000);
-    update_clock();// penalty time, removes 30 seconds from timer for wrong answer
-  }
-  let timeoutID = setTimeout(progressNextQuestion, 1000); // sets response to show for 1 second before moving on to the next question
-  document.querySelector('input[name="answer"]:checked').checked = false;
-} // submits and checks the answer
-
-
-submitBtn.addEventListener("click", submitQuestion);
-
-// progressNextQuestion --------------------------------------------------------------
-
-function progressNextQuestion(event) {
-  count++;
-  response.setAttribute("hidden", "");
-  submitBtn.disabled = false;
-  if (count >= questionList.length) {
-    serveNameEntry();
-    clearInterval(timeinterval);
-    timeinterval = null;
-    clock.innerHTML = 'Timer 00:00';
-  } else {
-    serveQuestion();
-  }
-} //  runs through the questions array, serving the next question in the array
-
-//submitBtn.addEventListener("click", progressNextQuestion);
-
-
-// leaderboard --------------------------------------------------------------
-
-function serveNameEntry() {
-  quiz.setAttribute("hidden", "");
-  nameEntry.removeAttribute("hidden");
-  finalScore();
-}
-
-function finalScore() {
-  var s = document.getElementById("yourScore");
-  var total = questionList.length;
-  s.innerHTML = "Final Score: " + correct + " / " + total;
-  console.log(correct);
-} // shows the final score - change to be tied to the upper left scores tag?
-
-
-
-var leaderboardNames = JSON.parse(localStorage.getItem("leaderboard"));
-
-function addName(event) {
-  var nameVal = document.getElementById("name").value;
-  if (!leaderboardNames) {
-    leaderboardNames = []
-  };
-  leaderboardNames.push({ nameVal, correct });
-  leaderboardNames = leaderboardNames.sort((a,b)=>b.correct-a.correct);
-  localStorage.setItem("leaderboard", JSON.stringify(leaderboardNames));
-  serveLeaderboard();
-} //adds name to the leaderboard array, sorts it by correct score
-
-function updateLB() {
-  var lB = document.getElementById("leaderboard");
-  lB.innerHTML = `${leaderboardNames[0].nameVal}: ${correct}`;
-} // serves leaderboard from addName
-
-function removeDivTag() {
-  var grabDiv = document.getElementById("lbValue");
-  if (grabDiv) {
-    var addLB = document.getElementById("leaderboard");
-    addLB.removeChild(grabDiv);
-  }
-}
-
-function addElementLB() {
-
-  var addLB = document.getElementById("leaderboard");
-  var divTag = document.createElement("div");
-  var olTag = document.createElement("ol");
-  removeDivTag();
-
-  for (var person of leaderboardNames) {
-    const lB1 = document.createElement("li");
-    olTag.appendChild(lB1);
-    lB1.textContent = `${person.nameVal}: ${person.correct}`;
-  }
-
-  addLB.insertBefore(divTag, retakeBtn);
-  divTag.setAttribute("id", "lbValue");
-  olTag.classList.add("options");
-  divTag.appendChild(olTag);
-}
-
-
-function serveLeaderboard() {
-  leaderboard.removeAttribute("hidden");
-  nameEntry.setAttribute("hidden", "");
-  intro.setAttribute("hidden", "");
-  quiz.setAttribute("hidden", "");
-  clock.setAttribute("hidden", "");
-  clearInterval(timeinterval);
-  addElementLB();
-}
-
-function retakeQuizClick(event) {
-  leaderboard.setAttribute("hidden", "")
-  startQuizClick();
-} // allows user to retake the quiz, starts over from the beginning
-
-scoreBtn.addEventListener("click", addName);
-
-retakeBtn.addEventListener("click", retakeQuizClick);
-
-highScoreView.addEventListener("click", serveLeaderboard);
