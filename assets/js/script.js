@@ -15,7 +15,7 @@ var endTime;
 var timeinterval;
 
 let correct = 0;
-let wrong = 0;
+//let wrong = 0;
 let count = 0;
 
 
@@ -53,7 +53,7 @@ function startQuizClick(event) {
   endTime = Date.now() + time_in_minutes * 60 * 1000;
   count = 0;
   correct = 0;
-  wrong = 0;
+  //wrong = 0;
   update_clock();
   progressQuizClick();
   serveQuestion();
@@ -118,7 +118,7 @@ var questionList = [
   },
   {
     question: "How does a FOR loop start?",
-    answers: ["for (i=0; i <= 5)", "for (i &lt;= 5; i++", "for i = 1 to 5", "for (i = 0; i&lt;= 5; i++)"],
+    answers: ["for (i=0; i <= 5)", "for (i &lt;= 5; i++)", "for i = 1 to 5", "for (i = 0; i&lt;= 5; i++)"],
     correctAnswer: 3,
   },
   {
@@ -153,27 +153,31 @@ function serveQuestion() {
   answer2.innerHTML = currentQuestion.answers[1];
   answer3.innerHTML = currentQuestion.answers[2];
   answer4.innerHTML = currentQuestion.answers[3];
+   //this will "reset" the radio buttons - need to figure out how to add it in
 } // serves the questions in the right format
 
 function submitQuestion() {
 
   var response = document.getElementById('response');
   var answer = document.querySelector('input[name="answer"]:checked').value;
+  submitBtn.disabled = true;
+//need to hide button upon submission, unhide for progressnextquestion
   if (answer == currentQuestion.correctAnswer) {
     response.innerHTML = "Correct!";
     response.removeAttribute("hidden")
     correct += 1;
-    console.log(currentQuestion.correctAnswer);
   }
   else {
     response.innerHTML = "Wrong";
     response.removeAttribute("hidden")
-    wrong += 1;
+    //wrong += 1;
     clearInterval(timeinterval);
     timeinterval = null;
     endTime = endTime - (30 * 1000);
-    update_clock();
+    update_clock();// penalty time, removes 30 seconds from timer for wrong answer
   }
+  let timeoutID = setTimeout(progressNextQuestion, 1000); // sets response to show for 1 second before moving on to the next question
+  document.querySelector('input[name="answer"]:checked').checked = false;
 } // submits and checks the answer
 
 
@@ -184,6 +188,7 @@ submitBtn.addEventListener("click", submitQuestion);
 function progressNextQuestion(event) {
   count++;
   response.setAttribute("hidden", "");
+  submitBtn.disabled = false;
   if (count >= questionList.length) {
     serveNameEntry();
     clearInterval(timeinterval);
@@ -194,7 +199,7 @@ function progressNextQuestion(event) {
   }
 } //  runs through the questions array, serving the next question in the array
 
-submitBtn.addEventListener("click", progressNextQuestion);
+//submitBtn.addEventListener("click", progressNextQuestion);
 
 
 // leaderboard --------------------------------------------------------------
@@ -277,8 +282,6 @@ function retakeQuizClick(event) {
 
 scoreBtn.addEventListener("click", addName);
 
-
 retakeBtn.addEventListener("click", retakeQuizClick);
-
 
 highScoreView.addEventListener("click", serveLeaderboard);
